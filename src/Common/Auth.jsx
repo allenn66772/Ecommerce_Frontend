@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function Auth({register}) {
   const dispatch= useDispatch()
-  const [submitted, setSubmitted] = useState(false); // ✅ NEW
+  const [submitted, setSubmitted] = useState(false); 
   const navigate=useNavigate()
 
 
@@ -27,6 +27,7 @@ useEffect(() => {
   if (isAuthenticated && !register) {
     alert("Login Successful");
     setSubmitted(false);
+    navigate("/home")
   }
 
   if (register && !error && !loading && !isAuthenticated) {
@@ -46,39 +47,51 @@ useEffect(() => {
   })
   console.log(userDetails);
 
-  const handleAuth=(e)=>{
-    e.preventDefault()
-    if(register){
-      if(!userDetails.username || !userDetails.email || !userDetails.password || !userDetails.confirmpassword){
-        alert("Fill All Fields completely")
-        return
-      }
-      if(userDetails.password !== userDetails.confirmpassword){
-        alert("Password doesnt match")
-        return
-      }
-      dispatch(
-        registerUser({
-          username:userDetails.username,
-          email:userDetails.email,
-          password:userDetails.password
-        })
-      )
-    }else{
-      //login
-      if(!userDetails.email || !userDetails.password){
-        alert("All fields required")
-        return
-      }
-      dispatch(
-        loginUser({
-          email:userDetails.email,
-          password:userDetails.password
-        })
-      )
+  const handleAuth = (e) => {
+  e.preventDefault();
+  setSubmitted(true);
 
+  if (register) {
+    if (
+      !userDetails.username ||
+      !userDetails.email ||
+      !userDetails.password ||
+      !userDetails.confirmpassword
+    ) {
+      alert("Fill All Fields completely");
+      setSubmitted(false);
+      return;
     }
+
+    if (userDetails.password !== userDetails.confirmpassword) {
+      alert("Password doesn't match");
+      setSubmitted(false);
+      return;
+    }
+
+    dispatch(
+      registerUser({
+        username: userDetails.username,
+        email: userDetails.email,
+        password: userDetails.password,
+      })
+    );
+  } else {
+    if (!userDetails.email || !userDetails.password) {
+      alert("All fields required");
+      setSubmitted(false);
+      return;
+    }
+
+    dispatch(
+      loginUser({
+        email: userDetails.email,
+        password: userDetails.password,
+      })
+    );
   }
+};
+
 
   
 

@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loginUserAPI, registerUserAPI } from "../service/allAPI";
+import { useNavigate } from "react-router-dom";
+
+
 
 // register thunk
 export const registerUser = createAsyncThunk(
@@ -54,6 +57,7 @@ const userSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload?.user || action.payload || null; // ✅ FIX
+       
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
