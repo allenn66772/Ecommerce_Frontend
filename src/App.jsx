@@ -8,6 +8,7 @@ import Allproducts from './User/Allproducts'
 import Viewproduct from './User/Viewproduct'
 import Cart from './User/Cart'
 import Checkout from './User/Checkout'
+import Addproducts from './Admin/Addproducts'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
 
      {/* Admin */}
      <Route path='/admin-home' element={<Admin_dashboard/>}/>
+     <Route path='/add-products' element={<Addproducts/>}/>
 
      {/* Common */}
      <Route path='/' element={<Landingpage/>}/>
