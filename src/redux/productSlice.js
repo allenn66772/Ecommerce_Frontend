@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addProductAPI } from "../service/allAPI";
+import { addProductAPI, getHomeProductAPI } from "../service/allAPI";
 
 // add-product thunk
 export const addProduct = createAsyncThunk(
@@ -13,6 +13,19 @@ export const addProduct = createAsyncThunk(
     }
   }
 );
+
+//get-product thunk
+export const getHomeProduct=createAsyncThunk(
+  "products/home-products",
+  async(reqHeader,{rejectWithValue})=>{
+    try{
+      const result=await getHomeProductAPI(reqHeader)
+      return result.data
+    }catch (error){
+     return rejectWithValue(error.response?.data || "something went wrong")
+    }
+  }
+)
 
 const productSlice = createSlice({
   name: "products",
@@ -40,7 +53,22 @@ const productSlice = createSlice({
       .addCase(addProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
-      });
+      })
+
+      //get home products
+      .addCase(getHomeProduct.pending,(state)=>{
+        state.loading=true;
+        state.error=null;
+      })
+      .addCase(getHomeProduct.fulfilled,(state,action)=>{
+        state.loading=true;
+        state.products=action.payload
+        
+      })
+      .addCase(getHomeProduct.rejected,(state,action)=>{
+        state.loading=false;
+        state.error=action.payload
+      })
   },
 });
 

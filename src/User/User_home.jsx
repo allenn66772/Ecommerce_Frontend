@@ -1,6 +1,40 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { getHomeProduct } from '../redux/productSlice'
+import SERVERURL from '../service/serverURL'
 
 function User_home() {
+  const [homeProduct,sethomeProducts]=useState([])
+
+  const dispatch=useDispatch()
+
+  const {products,loading,error}=useSelector(
+    (state)=> state.products
+  )
+    const token=sessionStorage.getItem("token")
+
+
+ 
+
+
+  useEffect(()=>{
+    if(token){
+       const reqHeader={
+    Authorization:`Bearer ${token}`
+  }
+  dispatch(getHomeProduct(reqHeader))
+  sethomeProducts(products)
+
+    }
+    
+  },[dispatch,token])
+
+ console.log(products);
+ 
+ 
+  
+ 
+
   return (
     <>
      
@@ -91,48 +125,24 @@ function User_home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
 
           {/* Product 1 */}
+         {products.map((item)=>(
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
             <img
-              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+              src={`${SERVERURL}/imgUploads/${item.uploadImages[0]}`}
               alt="Smart Watch"
               className="h-56 w-full object-cover rounded-xl"
             />
-            <h3 className="mt-4 text-xl font-semibold">Smart Watch</h3>
-            <p className="text-gray-400 mt-1">₹4,999</p>
+            <h3 className="mt-4 text-xl font-semibold">{item.pname}</h3>
+            <p className="text-gray-400 mt-1">₹{item.price}.₨</p>
             <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
               View Product
             </button>
           </div>
+         ))}
 
-          {/* Product 2 */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1518441902117-f5f47b6b0f76"
-              alt="Headphones"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-xl font-semibold">
-              Wireless Headphones
-            </h3>
-            <p className="text-gray-400 mt-1">₹2,999</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
+         
 
-          {/* Product 3 */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Shoes"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-xl font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
+         
 
         </div>
       </section>

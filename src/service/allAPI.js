@@ -20,3 +20,12 @@ export const loginUserAPI = async (reqBody) => {
 export const addProductAPI=async(reqBody)=>{
   return await commonAPI("POST",`${SERVERURL}/add-products`,reqBody)
 }
+
+
+//user
+
+
+//get 3 products in home
+export const getHomeProductAPI=async(reqHeader)=>{
+  return await commonAPI("GET",`${SERVERURL}/home-products`,{},reqHeader)
+}
