@@ -29,3 +29,7 @@ export const addProductAPI=async(reqBody)=>{
 export const getHomeProductAPI=async(reqHeader)=>{
   return await commonAPI("GET",`${SERVERURL}/home-products`,{},reqHeader)
 }
+//get all-products 
+export const getAllProductsAPI=async(reqHeader)=>{
+  return await commonAPI("GET",`${SERVERURL}/all-products`,{},reqHeader)
+}

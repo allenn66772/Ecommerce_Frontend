@@ -32,10 +32,10 @@ const userSlice = createSlice({
   name: "user",
   initialState: {
     loading: false,
-    user: null,
-    token: null,
+    user: JSON.parse(sessionStorage.getItem("user"))||null,
+    token:sessionStorage.getItem("token")||null,
     error: null,
-    isAuthenticated: false,
+  isAuthenticated: !!sessionStorage.getItem("token"),
   },
   reducers: {
     logout: (state) => {

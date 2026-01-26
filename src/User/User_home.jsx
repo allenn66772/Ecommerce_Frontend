@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getHomeProduct } from '../redux/productSlice'
 import SERVERURL from '../service/serverURL'
+import Header from '../Common/components/Header'
 
 function User_home() {
-  const [homeProduct,sethomeProducts]=useState([])
+
 
   const dispatch=useDispatch()
 
@@ -23,7 +24,7 @@ function User_home() {
     Authorization:`Bearer ${token}`
   }
   dispatch(getHomeProduct(reqHeader))
-  sethomeProducts(products)
+ 
 
     }
     
@@ -37,7 +38,7 @@ function User_home() {
 
   return (
     <>
-     
+     <Header/>
     <div className="min-h-screen bg-black text-white">
 
       {/* ================= CAROUSEL ================= */}

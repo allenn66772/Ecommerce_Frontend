@@ -1,6 +1,7 @@
 import React from 'react'
 import { FaShieldAlt, FaShoppingBag, FaTruck } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import Header from './components/Header'
 
 function Landingpage() {
   return (
@@ -8,18 +9,7 @@ function Landingpage() {
      <div className="min-h-screen bg-gray-950 text-white">
       
       {/* Navbar */}
-      <nav className="flex items-center justify-between px-10 py-6 border-b border-white/10">
-        <h1 className="text-2xl font-bold">ShopEase</h1>
-        <ul className="flex gap-8 text-gray-300">
-          <li className="hover:text-white cursor-pointer">Home</li>
-          <li className="hover:text-white cursor-pointer">Products</li>
-          <li className="hover:text-white cursor-pointer">About</li>
-          <li className="hover:text-white cursor-pointer">Contact</li>
-        </ul>
-        <Link to="/login" className="bg-indigo-600 px-5 py-2 rounded-lg hover:bg-indigo-700">
-          Login
-        </Link>
-      </nav>
+      <Header/>
 
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center text-center px-6 py-24">

@@ -1,8 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import Header from '../Common/components/Header'
+import { useDispatch, useSelector } from 'react-redux'
+import { getAllProducts } from '../redux/productSlice'
 
 function Allproducts() {
+  const dispatch=useDispatch()
+
+   const{products,loading,error}=useSelector((state)=>state.products)
+
+   const token=sessionStorage.getItem("token")
+
+   useEffect(()=>{
+    if(token){
+      const reqHeader={
+        Authorization:`Bearer ${token}`
+      }
+      dispatch(getAllProducts(reqHeader))
+    }
+   },[dispatch,token])
+
+   console.log(products);
+   
+
   return (
     <>
+    <Header/>
      <div className="min-h-screen bg-black text-white px-6 py-10">
 
       {/* ================= PAGE TITLE ================= */}

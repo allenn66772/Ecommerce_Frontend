@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { addProductAPI, getHomeProductAPI } from "../service/allAPI";
+import { addProductAPI, getAllProductsAPI, getHomeProductAPI } from "../service/allAPI";
 
 // add-product thunk
 export const addProduct = createAsyncThunk(
@@ -26,6 +26,20 @@ export const getHomeProduct=createAsyncThunk(
     }
   }
 )
+//get all products
+export const getAllProducts=createAsyncThunk(
+  "products/all-products",
+  async(reqHeader,{rejectWithValue})=>{
+    try {
+      const result=await getAllProductsAPI(reqHeader)
+      return result.data
+    } catch (error) {
+      return rejectWithValue(error.response?.data || "something went wrong" )
+      
+    }
+  }
+)
+
 
 const productSlice = createSlice({
   name: "products",
@@ -48,7 +62,7 @@ const productSlice = createSlice({
       })
       .addCase(addProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products.push(action.payload); // ✅ FIX
+        state.products.push(action.payload); 
       })
       .addCase(addProduct.rejected, (state, action) => {
         state.loading = false;
@@ -66,6 +80,19 @@ const productSlice = createSlice({
         
       })
       .addCase(getHomeProduct.rejected,(state,action)=>{
+        state.loading=false;
+        state.error=action.payload
+      })
+      //get all products
+      .addCase(getAllProducts.pending,(state)=>{
+        state.loading=true;
+        state.error=null;
+      })
+      .addCase(getAllProducts.fulfilled,(state,action)=>{
+        state.loading=true;
+        state.products=action.payload
+      })
+      .addCase(getAllProducts.rejected,(state,action)=>{
         state.loading=false;
         state.error=action.payload
       })
