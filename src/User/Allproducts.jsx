@@ -1,247 +1,170 @@
-import React, { useEffect } from 'react'
-import Header from '../Common/components/Header'
-import { useDispatch, useSelector } from 'react-redux'
-import { getAllProducts } from '../redux/productSlice'
+import React, { useEffect, useState } from "react";
+import Header from "../Common/components/Header";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllProducts } from "../redux/productSlice";
+import SERVERURL from "../service/serverURL";
 
 function Allproducts() {
-  const dispatch=useDispatch()
+  const [search, setSearch] = useState("");
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
 
-   const{products,loading,error}=useSelector((state)=>state.products)
+  const categories = [...new Set(products.map((item) => item.category))];
 
-   const token=sessionStorage.getItem("token")
+  const handleCategoryChange = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category],
+    );
+  };
 
-   useEffect(()=>{
-    if(token){
-      const reqHeader={
-        Authorization:`Bearer ${token}`
-      }
-      dispatch(getAllProducts(reqHeader))
+  const filteredProducts = products.filter((item) => {
+    const matchSearch = item.pname?.toLowerCase().includes(search.toLowerCase());
+
+    const matchCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(item.category);
+
+    return matchSearch && matchCategory;
+  });
+
+  const token = sessionStorage.getItem("token");
+
+  useEffect(() => {
+    if (token) {
+      const reqHeader = {
+        Authorization: `Bearer ${token}`,
+      };
+      dispatch(getAllProducts(reqHeader));
     }
-   },[dispatch,token])
+  }, [dispatch, token]);
 
-   console.log(products);
-   
+  console.log(products);
 
   return (
     <>
-    <Header/>
-     <div className="min-h-screen bg-black text-white px-6 py-10">
+      <Header />
+      <div className="min-h-screen bg-black text-white px-6 py-10">
+        {/* ================= PAGE TITLE ================= */}
+        <h1 className="text-3xl font-bold mb-10 text-center">All Products</h1>
+        {/* Search Bar */}
+        <div className="w-full items-center justify-center flex mb-10 ">
+          <input
+            type="text"
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search Your Products"
+            className="w-120 h-10 rounded rounded-2xl placeholder:p-4 border border-gray-700"
+          />
+        </div>
 
-      {/* ================= PAGE TITLE ================= */}
-      <h1 className="text-3xl font-bold mb-10 text-center">
-        All Products
-      </h1>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
+          {/* ================= FILTER SIDEBAR ================= */}
+          <aside className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 h-fit">
+            <h2 className="text-xl font-semibold mb-6">Filters</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-
-        {/* ================= FILTER SIDEBAR ================= */}
-        <aside className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6 h-fit">
-
-          <h2 className="text-xl font-semibold mb-6">Filters</h2>
-
-          {/* Category Filter */}
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-300 mb-3">
-              Category
-            </h3>
-            <div className="space-y-2 text-gray-400">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" />
-                Electronics
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" />
-                Fashion
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" />
-                Footwear
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" />
-                Accessories
-              </label>
+            {/* Category Filter */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">
+                Category
+              </h3>
+              <div className="space-y-2 text-gray-400">
+                {categories.map((category) => (
+                  <label key={category} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      className="accent-indigo-600"
+                      checked={selectedCategories.includes(category)}
+                      onChange={() => handleCategoryChange(category)}
+                    />
+                    {category}
+                  </label>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* Price Filter */}
-          <div className="mb-6">
-            <h3 className="text-sm font-semibold text-gray-300 mb-3">
-              Price Range
-            </h3>
-            <div className="space-y-2 text-gray-400">
-              <label className="flex items-center gap-2">
-                <input type="radio" name="price" className="accent-indigo-600" />
-                Under ₹1,000
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="radio" name="price" className="accent-indigo-600" />
-                ₹1,000 – ₹3,000
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="radio" name="price" className="accent-indigo-600" />
-                ₹3,000 – ₹5,000
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="radio" name="price" className="accent-indigo-600" />
-                Above ₹5,000
-              </label>
+            {/* Price Filter */}
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">
+                Price Range
+              </h3>
+              <div className="space-y-2 text-gray-400">
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="price"
+                    className="accent-indigo-600"
+                  />
+                  Under ₹1,000
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="price"
+                    className="accent-indigo-600"
+                  />
+                  ₹1,000 – ₹3,000
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="price"
+                    className="accent-indigo-600"
+                  />
+                  ₹3,000 – ₹5,000
+                </label>
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="price"
+                    className="accent-indigo-600"
+                  />
+                  Above ₹5,000
+                </label>
+              </div>
             </div>
-          </div>
 
-          {/* Rating Filter */}
-          <div>
-            <h3 className="text-sm font-semibold text-gray-300 mb-3">
-              Customer Rating
-            </h3>
-            <div className="space-y-2 text-gray-400">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" />
-                ⭐⭐⭐⭐ & above
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" className="accent-indigo-600" />
-                ⭐⭐⭐ & above
-              </label>
+            {/* Rating Filter */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-300 mb-3">
+                Customer Rating
+              </h3>
+              <div className="space-y-2 text-gray-400">
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="accent-indigo-600" />
+                  ⭐⭐⭐⭐ & above
+                </label>
+                <label className="flex items-center gap-2">
+                  <input type="checkbox" className="accent-indigo-600" />
+                  ⭐⭐⭐ & above
+                </label>
+              </div>
             </div>
-          </div>
-        </aside>
+          </aside>
 
-        {/* ================= PRODUCTS GRID ================= */}
-        <section className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-
-          {/* Product Card 1 */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Smart Watch</h3>
-            <p className="text-gray-400 mt-1">₹4,999</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-          {/* Product Card 2 */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1518441902117-f5f47b6b0f76"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">
-              Wireless Headphones
-            </h3>
-            <p className="text-gray-400 mt-1">₹2,999</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-          {/* Product Card 3 */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-            <img
-              src="https://images.unsplash.com/photo-1542291026-7eec264c27ff"
-              alt="Product"
-              className="h-56 w-full object-cover rounded-xl"
-            />
-            <h3 className="mt-4 text-lg font-semibold">Running Shoes</h3>
-            <p className="text-gray-400 mt-1">₹3,499</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
-          </div>
-
-        </section>
+          {/* ================= PRODUCTS GRID ================= */}
+          <section className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Product Card 1 */}
+            {filteredProducts.map((item) => (
+              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
+                <img
+                  src={`${SERVERURL}/imgUploads/${item.uploadImages[0]}`}
+                  alt="Product"
+                  className="h-56 w-full object-cover rounded-xl"
+                />
+                <h3 className="mt-4 text-lg font-semibold">{item.pname}</h3>
+                <p className="text-gray-400 mt-1">₹{item.price} Rs</p>
+                <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
+                  View Product
+                </button>
+              </div>
+            ))}
+          </section>
+        </div>
       </div>
-    </div>
-    
     </>
-  )
+  );
 }
 
-export default Allproducts
+export default Allproducts;

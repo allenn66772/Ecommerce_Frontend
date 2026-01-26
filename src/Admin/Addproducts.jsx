@@ -61,6 +61,7 @@ function Addproducts() {
       productDesc,
       price,
       dprice,
+      category,
       discount,
       highlights,
       uploadImages,
@@ -76,6 +77,7 @@ function Addproducts() {
     formData.append("description", description);
     formData.append("productDesc", productDesc);
     formData.append("price", price);
+    formData.append("category",category)
     formData.append("dprice", dprice);
     formData.append("discount", discount);
 
@@ -122,10 +124,11 @@ function Addproducts() {
             className="w-full bg-[#1a1a1a] border border-gray-700 rounded-xl px-4 py-3 h-28 text-white"
           />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <input type="number" name="price" value={productDetails.price} onChange={handleChange} placeholder="Price" className="input" />
-            <input type="number" name="dprice" value={productDetails.dprice} onChange={handleChange} placeholder="Discount Price" className="input" />
-            <input type="number" name="discount" value={productDetails.discount} onChange={handleChange} placeholder="Discount (%)" className="input" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input type="number" name="price" value={productDetails.price} onChange={handleChange} placeholder="Price" className="input text-white border border-gray-700 rounded  placeholder:p-3" />
+            <input type="number" name="dprice" value={productDetails.dprice} onChange={handleChange} placeholder="Discount Price" className="input text-white border border-gray-700 rounded placeholder:p-3" />
+            <input type="number" name="discount" value={productDetails.discount} onChange={handleChange} placeholder="Discount (%)" className="input text-white border border-gray-700 rounded placeholder:p-3" />
+            <input type="text" name="category" value={productDetails.category} onChange={handleChange} placeholder="category" className="input text-white border border-gray-700 rounded placeholder:p-3" />
           </div>
 
           <textarea

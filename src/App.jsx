@@ -27,7 +27,7 @@ function App() {
      {/* user */}
      <Route path='/home' element={<User_home/>}/>
      <Route path='/all-products' element={<Allproducts/>}/>
-     <Route path='/view' element={<Viewproduct/>}/>
+     <Route path='/view-products/:id' element={<Viewproduct/>}/>
      <Route path='/cart' element={<Cart/>}/>
      <Route path='/checkout' element={<Checkout/>}/>
     </Routes>
