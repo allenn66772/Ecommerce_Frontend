@@ -33,3 +33,7 @@ export const getHomeProductAPI=async(reqHeader)=>{
 export const getAllProductsAPI=async(reqHeader)=>{
   return await commonAPI("GET",`${SERVERURL}/all-products`,{},reqHeader)
 }
+//view product
+export const viewProductAPI=async(id,reqHeader)=>{
+  return await commonAPI("GET",`${SERVERURL}/view-product/${id}`,{},reqHeader)
+}

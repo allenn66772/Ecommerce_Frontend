@@ -3,6 +3,7 @@ import Header from "../Common/components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../redux/productSlice";
 import SERVERURL from "../service/serverURL";
+import { Link } from "react-router-dom";
 
 function Allproducts() {
   const [search, setSearch] = useState("");
@@ -147,18 +148,18 @@ function Allproducts() {
           <section className="md:col-span-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {/* Product Card 1 */}
             {filteredProducts.map((item) => (
-              <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
-                <img
-                  src={`${SERVERURL}/imgUploads/${item.uploadImages[0]}`}
-                  alt="Product"
-                  className="h-56 w-full object-cover rounded-xl"
-                />
-                <h3 className="mt-4 text-lg font-semibold">{item.pname}</h3>
-                <p className="text-gray-400 mt-1">₹{item.price} Rs</p>
-                <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-                  View Product
-                </button>
-              </div>
+              <Link to={`/view-products/${item._id}`}>
+                <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-5 hover:scale-105 transition">
+                  <img
+                    src={`${SERVERURL}/imgUploads/${item.uploadImages[0]}`}
+                    alt="Product"
+                    className="h-56 w-full object-cover rounded-xl"
+                  />
+                  <h3 className="mt-4 text-lg font-semibold">{item.pname}</h3>
+                  <p className="text-gray-400 mt-1">₹{item.price} Rs</p>
+                  
+                </div>
+              </Link>
             ))}
           </section>
         </div>

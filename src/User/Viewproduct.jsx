@@ -1,6 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {viewProducts } from '../redux/productSlice';
+import { useParams } from 'react-router-dom';
 
 function Viewproduct() {
+  const dispatch=useDispatch()
+  const{ selectedProduct,loading,error}=useSelector((state)=>state.products)
+  const {id}=useParams()
+  const token=sessionStorage.getItem("token");
+  useEffect(()=>{
+    if(token && id){
+      const reqHeader={
+        Authorization:`Bearer ${token}`
+      }
+      dispatch(viewProducts({id,reqHeader}))
+    }
+  },[dispatch,token,id])
+
+  console.log(selectedProduct);
+  
+
   return (
     <>
      <div className="min-h-screen bg-black text-white px-6 py-12">
