@@ -55,26 +55,25 @@ function Viewproduct() {
         <div>
 
           <h1 className="text-4xl font-bold mb-4">
-            Smart Watch Series X
+           {selectedProduct?.pname}
           </h1>
 
           <p className="text-gray-400 mb-6">
-            Premium wearable technology designed to keep you connected,
-            healthy, and active throughout your day.
+           {selectedProduct?.description}
           </p>
 
           {/* Price */}
-          <div className="flex items-center gap-4 mb-6">
+         {selectedProduct && <div className="flex items-center gap-4 mb-6">
             <span className="text-3xl font-bold text-indigo-400">
-              ₹4,999
+              ₹{selectedProduct?.dprice}
             </span>
             <span className="text-gray-500 line-through">
-              ₹6,999
+              ₹{selectedProduct?.price}
             </span>
             <span className="text-green-400 font-semibold">
-              28% OFF
+              {selectedProduct?.discount}% OFF
             </span>
-          </div>
+          </div>}
 
           {/* Rating */}
           <div className="flex items-center gap-2 mb-6 text-yellow-400">
@@ -107,18 +106,19 @@ function Viewproduct() {
           </div>
 
           {/* Product Highlights */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
+          {selectedProduct?.highlights?.length>0 &&(
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
             <h3 className="text-lg font-semibold mb-4">
               Product Highlights
             </h3>
             <ul className="space-y-2 text-gray-400 list-disc list-inside">
-              <li>AMOLED Display</li>
-              <li>Heart Rate & Sleep Tracking</li>
-              <li>7 Days Battery Life</li>
-              <li>Water Resistant</li>
-              <li>Bluetooth & GPS Support</li>
+              {selectedProduct.highlights.map((item,index)=>(
+                <li key={index}>{item}</li>
+              ))}
+           
             </ul>
           </div>
+          ) }
 
         </div>
       </div>
@@ -129,10 +129,7 @@ function Viewproduct() {
           Product Description
         </h2>
         <p className="text-gray-400 leading-relaxed">
-          The Smart Watch Series X is designed for those who want to stay
-          connected and healthy without compromising on style. Featuring a
-          vibrant AMOLED display, advanced fitness tracking, and long-lasting
-          battery life, this smartwatch is your perfect everyday companion.
+         {selectedProduct?.productDesc}
         </p>
       </div>
 
