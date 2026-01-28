@@ -37,3 +37,7 @@ export const getAllProductsAPI=async(reqHeader)=>{
 export const viewProductAPI=async(id,reqHeader)=>{
   return await commonAPI("GET",`${SERVERURL}/view-product/${id}`,{},reqHeader)
 }
+//add to cart 
+export const addToCartAPI=async(reqBody,reqHeader)=>{
+  return await commonAPI("POST",`${SERVERURL}/add-to-cart`,reqBody,reqHeader)
+}

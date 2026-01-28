@@ -28,7 +28,7 @@ function Addproducts() {
     }));
   };
 
-  // ✅ handle multiple image uploads (append)
+  //  handle multiple image uploads (append)
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
 

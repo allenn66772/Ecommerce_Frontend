@@ -5,13 +5,19 @@ import { getAllProducts } from "../redux/productSlice";
 import SERVERURL from "../service/serverURL";
 import { Link } from "react-router-dom";
 
+
 function Allproducts() {
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const dispatch = useDispatch();
   const { products, loading, error } = useSelector((state) => state.products);
+  
 
   const categories = [...new Set(products.map((item) => item.category))];
+
+  const handleSelectAll = () => {
+  setSelectedCategories([]);
+};
 
   const handleCategoryChange = (category) => {
     setSelectedCategories((prev) =>
@@ -32,6 +38,8 @@ function Allproducts() {
   });
 
   const token = sessionStorage.getItem("token");
+
+
 
   useEffect(() => {
     if (token) {
@@ -71,6 +79,16 @@ function Allproducts() {
                 Category
               </h3>
               <div className="space-y-2 text-gray-400">
+                <label className="flex items-center gap-2 font-semibold text-white">
+  <input
+    type="checkbox"
+    className="accent-indigo-600"
+    checked={selectedCategories.length === 0}
+    onChange={handleSelectAll}
+  />
+  All
+</label>
+
                 {categories.map((category) => (
                   <label key={category} className="flex items-center gap-2">
                     <input

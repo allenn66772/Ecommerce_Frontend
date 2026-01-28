@@ -2,12 +2,35 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {viewProducts } from '../redux/productSlice';
 import { useParams } from 'react-router-dom';
+import { addToCart } from '../redux/cartSlice';
 
 function Viewproduct() {
   const dispatch=useDispatch()
   const{ selectedProduct,loading,error}=useSelector((state)=>state.products)
   const {id}=useParams()
   const token=sessionStorage.getItem("token");
+
+
+//  add to cart
+  const handleAddtoCart =(e,productId)=>{
+    e.preventDefault()
+
+   if(!token){
+    alert("Please Login to add products to cart")
+    return
+   }
+    const reqHeader={
+      Authorization:`Bearer ${token}`
+    }
+    const reqBody={
+      productId,
+      quantity:1
+    }
+    dispatch(addToCart({reqBody,reqHeader}))
+  }
+
+
+
   useEffect(()=>{
     if(token && id){
       const reqHeader={
@@ -97,7 +120,7 @@ function Viewproduct() {
 
           {/* Buttons */}
           <div className="flex gap-4 mb-10">
-            <button className="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-semibold">
+            <button onClick={(e)=> handleAddtoCart(e,item._id)} className="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-semibold">
               Add to Cart
             </button>
             <button className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition font-semibold">
