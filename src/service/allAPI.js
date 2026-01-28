@@ -1,3 +1,4 @@
+import { ServerRouter } from "react-router-dom";
 import commonAPI from "./commonAPI";
 import SERVERURL from "./serverURL";
 
@@ -40,4 +41,12 @@ export const viewProductAPI=async(id,reqHeader)=>{
 //add to cart 
 export const addToCartAPI=async(reqBody,reqHeader)=>{
   return await commonAPI("POST",`${SERVERURL}/add-to-cart`,reqBody,reqHeader)
+}
+//get to cart
+export const getCartAPI=async(reqHeader)=>{
+  return await commonAPI("GET",`${SERVERURL}/get-from-cart`,{},reqHeader)
+}
+// update quantity
+export const updateQtyAPI=async(reqBody,reqHeader)=>{
+  return await commonAPI("PUT",`${SERVERURL}/update-product-quantity`,reqBody,reqHeader)
 }

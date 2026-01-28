@@ -1,6 +1,31 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { decreaseQty, getCart, increaseQty, updateCartQty } from '../redux/cartSlice';
+import SERVERURL from '../service/serverURL';
 
 function Cart() {
+
+
+ const dispatch=useDispatch()
+ const {cartItems,loading}=useSelector((state)=>state.cart);
+ const token=sessionStorage.getItem("token")
+ const reqHeader={
+  Authorization:`Bearer ${token}`
+ }
+
+
+
+ useEffect(()=>{
+  if(token){
+    dispatch(getCart(reqHeader))
+    // dispatch(updateCartQty({productId,quantity,reqHeader}))
+  }
+ },[dispatch,token])
+
+ console.log(cartItems);
+ 
+ 
+
   return (
     <>
     <div className="min-h-screen bg-black text-white px-6 py-12">
@@ -15,31 +40,54 @@ function Cart() {
         <section className="lg:col-span-2 space-y-6">
 
           {/* Cart Item 1 */}
+         {cartItems.length>0 ? (cartItems.map((item)=>(
           <div className="flex gap-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
             <img
-              src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"
+              src={`${SERVERURL}/imgUploads/${item.productId.uploadImages[0]}`}
               alt="Product"
               className="h-28 w-28 object-cover rounded-xl"
             />
 
             <div className="flex-1">
               <h3 className="text-xl font-semibold">
-                Smart Watch Series X
+                {item.productId?.pname}
               </h3>
               <p className="text-gray-400 text-sm mt-1">
                 Color: Black
               </p>
               <p className="text-indigo-400 font-semibold mt-2">
-                ₹4,999
+                ₹{item.productId?.dprice}
               </p>
+              <p className="text-indigo-400 font-semibold mt-2">
+                {item.productId.description}
+              </p>
+
 
               {/* Quantity */}
               <div className="flex items-center gap-4 mt-4">
-                <button className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
+                <button
+                 onClick={() => {
+    dispatch(decreaseQty(item.productId._id));
+    dispatch(updateCartQty({
+      productId: item.productId._id,
+      quantity: item.quantity - 1,
+      reqHeader
+    }));
+  }}
+                 className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
                   −
                 </button>
-                <span>1</span>
-                <button className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
+                <span>{item.quantity}</span>
+                <button
+                 onClick={() => {
+    dispatch(increaseQty(item.productId._id));
+    dispatch(updateCartQty({
+      productId: item.productId._id,
+      quantity: item.quantity + 1,
+      reqHeader
+    }));
+  }}
+                 className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
                   +
                 </button>
               </div>
@@ -50,41 +98,11 @@ function Cart() {
               Remove
             </button>
           </div>
+          ) )) :
+          <p>CArt is empty</p>
+          }
 
-          {/* Cart Item 2 */}
-          <div className="flex gap-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-6">
-            <img
-              src="https://images.unsplash.com/photo-1518441902117-f5f47b6b0f76"
-              alt="Product"
-              className="h-28 w-28 object-cover rounded-xl"
-            />
-
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold">
-                Wireless Headphones
-              </h3>
-              <p className="text-gray-400 text-sm mt-1">
-                Color: White
-              </p>
-              <p className="text-indigo-400 font-semibold mt-2">
-                ₹2,999
-              </p>
-
-              <div className="flex items-center gap-4 mt-4">
-                <button className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
-                  −
-                </button>
-                <span>1</span>
-                <button className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
-                  +
-                </button>
-              </div>
-            </div>
-
-            <button className="text-red-400 hover:text-red-500">
-              Remove
-            </button>
-          </div>
+         
 
         </section>
 

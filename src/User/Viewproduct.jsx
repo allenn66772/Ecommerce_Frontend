@@ -14,6 +14,7 @@ function Viewproduct() {
 //  add to cart
   const handleAddtoCart =(e,productId)=>{
     e.preventDefault()
+    console.log("ADD TO CART CLICKED:", productId);
 
    if(!token){
     alert("Please Login to add products to cart")
@@ -120,7 +121,7 @@ function Viewproduct() {
 
           {/* Buttons */}
           <div className="flex gap-4 mb-10">
-            <button onClick={(e)=> handleAddtoCart(e,item._id)} className="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-semibold">
+            <button onClick={(e)=> handleAddtoCart(e,selectedProduct?._id)} className="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition font-semibold">
               Add to Cart
             </button>
             <button className="flex-1 py-3 rounded-xl bg-white/10 border border-white/20 hover:bg-white/20 transition font-semibold">
