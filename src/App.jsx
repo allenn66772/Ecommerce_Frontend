@@ -9,6 +9,7 @@ import Viewproduct from './User/Viewproduct'
 import Cart from './User/Cart'
 import Checkout from './User/Checkout'
 import Addproducts from './Admin/Addproducts'
+import Wishlist from './User/Wishlist'
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
      <Route path='/view-products/:id' element={<Viewproduct/>}/>
      <Route path='/cart' element={<Cart/>}/>
      <Route path='/checkout' element={<Checkout/>}/>
+     <Route path='/wishlist' element={<Wishlist/>}/>
     </Routes>
     </>
   )

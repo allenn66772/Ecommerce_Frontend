@@ -4,14 +4,20 @@ import { decreaseQty, getCart, increaseQty, removeFromCart, updateCartQty } from
 import SERVERURL from '../service/serverURL';
 
 function Cart() {
-
-
  const dispatch=useDispatch()
  const {cartItems,loading}=useSelector((state)=>state.cart);
  const token=sessionStorage.getItem("token")
  const reqHeader={
   Authorization:`Bearer ${token}`
  }
+
+const subtotal = cartItems.reduce((sum, item) => {
+  const price = Number(item.productId?.dprice) || 0;
+  const quantity = Number(item.quantity) || 0;
+  return sum + price * quantity;
+}, 0);
+ const deliveryCharge = subtotal > 0 ? 50 : 0;
+ const totalCost = subtotal + deliveryCharge;
 
 
 
@@ -121,12 +127,13 @@ function Cart() {
           <div className="space-y-4 text-gray-400">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>₹7,998</span>
+              <span>₹{subtotal.toLocaleString("en-IN")}</span>
+
             </div>
 
             <div className="flex justify-between">
               <span>Delivery</span>
-              <span>₹99</span>
+               <span>₹{deliveryCharge}</span>
             </div>
 
             <div className="flex justify-between">
@@ -138,7 +145,7 @@ function Cart() {
 
             <div className="flex justify-between text-lg font-semibold text-white">
               <span>Total</span>
-              <span>₹7,597</span>
+             <span>₹{totalCost.toLocaleString("en-IN")}</span>
             </div>
           </div>
 

@@ -60,6 +60,8 @@ export const removeFromCart=createAsyncThunk(
     }
 )
 
+
+
 const cartSlice=createSlice({
     name:"cart",
     initialState:{

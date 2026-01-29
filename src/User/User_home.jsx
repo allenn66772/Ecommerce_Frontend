@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getHomeProduct } from '../redux/productSlice'
 import SERVERURL from '../service/serverURL'
 import Header from '../Common/components/Header'
+import { Link } from 'react-router-dom'
 
 function User_home() {
 
@@ -135,9 +136,11 @@ function User_home() {
             />
             <h3 className="mt-4 text-xl font-semibold">{item.pname}</h3>
             <p className="text-gray-400 mt-1">₹{item.price}.₨</p>
-            <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
-              View Product
-            </button>
+           <Link to={`/view-products/${item._id}`}>
+              <button className="mt-4 w-full py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition">
+                View Product
+              </button>
+           </Link>
           </div>
          ))}
 

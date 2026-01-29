@@ -63,6 +63,7 @@ const  {user,isAuthenticated}=useSelector((state)=>state.user)
             Login
           </Link>
          }
+         <Link to="/cart" className='text-white'>CART</Link>
 
         </div>
       </div>
