@@ -50,3 +50,7 @@ export const getCartAPI=async(reqHeader)=>{
 export const updateQtyAPI=async(reqBody,reqHeader)=>{
   return await commonAPI("PUT",`${SERVERURL}/update-product-quantity`,reqBody,reqHeader)
 }
+// remove item
+export const removeFromCartAPI = async (productId, reqHeader) => {
+  return await commonAPI("DELETE",`${SERVERURL}/remove/${productId}`,{},reqHeader);
+};

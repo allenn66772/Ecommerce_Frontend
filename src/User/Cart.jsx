@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { decreaseQty, getCart, increaseQty, updateCartQty } from '../redux/cartSlice';
+import { decreaseQty, getCart, increaseQty, removeFromCart, updateCartQty } from '../redux/cartSlice';
 import SERVERURL from '../service/serverURL';
 
 function Cart() {
@@ -67,26 +67,26 @@ function Cart() {
               <div className="flex items-center gap-4 mt-4">
                 <button
                  onClick={() => {
-    dispatch(decreaseQty(item.productId._id));
-    dispatch(updateCartQty({
-      productId: item.productId._id,
-      quantity: item.quantity - 1,
-      reqHeader
-    }));
-  }}
+                  dispatch(decreaseQty(item.productId._id));
+                  dispatch(updateCartQty({
+                    productId: item.productId._id,
+                    quantity: item.quantity - 1,
+                    reqHeader
+                  }));
+                }}
                  className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
                   −
                 </button>
                 <span>{item.quantity}</span>
                 <button
                  onClick={() => {
-    dispatch(increaseQty(item.productId._id));
-    dispatch(updateCartQty({
-      productId: item.productId._id,
-      quantity: item.quantity + 1,
-      reqHeader
-    }));
-  }}
+                    dispatch(increaseQty(item.productId._id));
+                    dispatch(updateCartQty({
+                      productId: item.productId._id,
+                      quantity: item.quantity + 1,
+                      reqHeader
+                    }));
+                  }}
                  className="h-8 w-8 rounded-lg bg-white/10 border border-white/20">
                   +
                 </button>
@@ -94,9 +94,14 @@ function Cart() {
             </div>
 
             {/* Remove */}
-            <button className="text-red-400 hover:text-red-500">
-              Remove
-            </button>
+          <button
+           onClick={()=>dispatch(removeFromCart({productId:item.productId._id,reqHeader,
+      })
+    )
+  }
+>
+  Remove
+</button>
           </div>
           ) )) :
           <p>CArt is empty</p>
